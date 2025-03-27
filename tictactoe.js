@@ -54,15 +54,55 @@ const playGame = (function () {
   function declareWinnerOrTie() {
     // check for winner across, down or diagonal
     // check for tie if all squares are filled and no winner
-    const winner = false;
-    const tie = false;
-    // count the number of Xs in each row
-    // if equal to 3, declare winner
+
     function isX(value) {
       return value === "X";
     }
+
     function isO(value) {
       return value === "O";
+    }
+
+    function checkColumns(choice) {
+      for (let j = 0; j < 3; j++) {
+        let count = 0;
+        for (let i = 0; i < 3; i++) {
+          if (board[i][j] === choice) {
+            count++;
+            if (count === 3) {
+              return true;
+            }
+          }
+        }
+      }
+      return false;
+    }
+
+    function checkDiagonal(choice) {
+      if (
+        (board[0][0] === choice &&
+          board[1][1] === choice &&
+          board[2][2] === choice) ||
+        (board[0][2] === choice &&
+          board[1][1] === choice &&
+          board[2][0] === choice)
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    function checkForTie() {
+      let newArr = [];
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          if (board[i][j] === "") {
+            newArr.push(1);
+          }
+        }
+      }
+      return !newArr.length; // Returns true for empty array
     }
 
     function declareWinner(player, choice) {
@@ -82,26 +122,18 @@ const playGame = (function () {
       board[2].filter(isO).length === 3
     ) {
       declareWinner(playerTwo, players[1].choice);
-    } else if (
-      board[0][0] === "X" &&
-      board[1][0] === "X" &&
-      board[2][0] === "X"
-      // Can we do this more elegantly rather
-      // than check for X and O in every column
-      // manually?
-      // let testCol1 = [];
-      // for (let i = 0; i < 3; i++) {
-      //   testCol1 = board[0][i].push;
-      // }
-      // board.reduce(myFunction)
-    ) {
+    } else if (checkColumns("X")) {
       declareWinner(playerOne, players[0].choice);
+    } else if (checkColumns("O")) {
+      declareWinner(playerTwo, players[1].choice);
+    } else if (checkDiagonal("X")) {
+      declareWinner(playerOne, players[0].choice);
+    } else if (checkDiagonal("O")) {
+      declareWinner(playerTwo, players[1].choice);
+    } else if (checkForTie()) {
+      console.log("It's the cat's game.");
     }
   }
 
   return { chooseSquare, declareWinnerOrTie };
 })();
-
-playGame.chooseSquare(0, 0, "X");
-playGame.chooseSquare(1, 0, "X");
-playGame.chooseSquare(2, 0, "X");
