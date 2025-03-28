@@ -12,13 +12,13 @@
   width: 75px;
 }
 
-.row0,
-.row1 {
+.zero,
+.one {
   border-top: none;
   border-bottom: 4px solid black;
 }
-.row0:not([column="2"]),
-.row1:not([column="2"]),
-.row2:not([column="2"]) {
+.zero:not([data-column="2"]),
+.one:not([data-column="2"]),
+.two:not([data-column="2"]) {
   border-right: 4px solid black;
 }

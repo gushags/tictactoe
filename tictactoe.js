@@ -19,10 +19,10 @@ function gameBoard() {
 
   const getBoard = () => board;
 
-  return { getBoard }; // Used by DOM to create board
+  return { getBoard };
 }
 
-const playGame = (function () {
+function playGame() {
   // Conditions for ending game
   let winner = false;
   let tie = false;
@@ -34,7 +34,9 @@ const playGame = (function () {
     { name: playerOne, choice: "X" },
     { name: playerTwo, choice: "O" },
   ];
+
   let playerTurn = 0;
+
   console.log(myBoard.getBoard());
   console.log(
     "It's Player One's turn. Make a choice by typing 'playGame.playRound(row, column)'."
@@ -158,5 +160,20 @@ const playGame = (function () {
     // a New Game button
   }
 
-  return { playRound };
-})();
+  return { playRound, getBoard: myBoard.getBoard };
+}
+
+function displayDOM() {
+  const game = playGame();
+  const currentBoard = game.getBoard();
+
+  const spaces = document.querySelectorAll(".row");
+
+  spaces.forEach((space) => {
+    space.addEventListener("click", function () {
+      game.playRound(space.dataset.row, space.dataset.column);
+      space.textContent = currentBoard[space.dataset.row][space.dataset.column];
+    });
+  });
+}
+displayDOM();
