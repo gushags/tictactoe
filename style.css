@@ -1,0 +1,24 @@
+@import url(css-reset-josh.css);
+
+.gameboard {
+  display: grid;
+  width: 225px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+[class^="row"] {
+  background-color: aquamarine;
+  height: 75px;
+  width: 75px;
+}
+
+.row0,
+.row1 {
+  border-top: none;
+  border-bottom: 4px solid black;
+}
+.row0:not([column="2"]),
+.row1:not([column="2"]),
+.row2:not([column="2"]) {
+  border-right: 4px solid black;
+}

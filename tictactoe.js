@@ -2,7 +2,7 @@
  ** Gameboard function that creates a board that is 3x3
  ** Function should be an array
  ** Each square holds a cell capable of holding X or O.
- ** We will need to expose a method called chooseSquare
+ ** We will need to expose a method called playRound
  */
 function gameBoard() {
   const rows = 3;
@@ -126,17 +126,16 @@ const playGame = (function () {
       console.log(`${player} (${choice}s) is the winner.`);
     }
 
-    // 1st row X or O
     if (
       board[0].filter(isX).length === 3 ||
       board[1].filter(isX).length === 3 ||
-      board[2].filter(isX).length === 3
+      board[2].filter(isX).length === 3 // Check rows for X
     ) {
       declareWinner(playerOne, players[0].choice);
     } else if (
       board[0].filter(isO).length === 3 ||
       board[1].filter(isO).length === 3 ||
-      board[2].filter(isO).length === 3
+      board[2].filter(isO).length === 3 // Check rows for O
     ) {
       declareWinner(playerTwo, players[1].choice);
     } else if (checkColumns("X")) {
@@ -159,15 +158,5 @@ const playGame = (function () {
     // a New Game button
   }
 
-  return { playRound, declareWinnerOrTie };
+  return { playRound };
 })();
-
-playGame.playRound(2, 0);
-playGame.playRound(1, 0);
-playGame.playRound(2, 1);
-playGame.playRound(1, 1);
-playGame.playRound(0, 0);
-playGame.playRound(2, 2);
-playGame.playRound(1, 2);
-playGame.playRound(0, 1);
-playGame.playRound(0, 1);
