@@ -8,11 +8,8 @@ function gameBoard() {
   const rows = 3;
   const columns = 3;
   const board = [];
-  //   const testArr = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 
-  // Create tic-tac-toe board
-  // Need to creat a method to fill the cell with correct
-  // information. Until then, using a "".
+  // Fill board with blanks
   for (let i = 0; i < rows; i++) {
     board[i] = [];
     for (let j = 0; j < columns; j++) {
@@ -22,10 +19,14 @@ function gameBoard() {
 
   const getBoard = () => board;
 
-  return { getBoard };
+  return { getBoard }; // Used by DOM to create board
 }
 
 const playGame = (function () {
+  // Conditions for ending game
+  let winner = false;
+  let tie = false;
+
   const myBoard = gameBoard();
   const playerOne = "Player One";
   const playerTwo = "Player Two";
@@ -33,12 +34,25 @@ const playGame = (function () {
     { name: playerOne, choice: "X" },
     { name: playerTwo, choice: "O" },
   ];
+  let playerTurn = 0;
+  console.log(myBoard.getBoard());
+  console.log(
+    "It's Player One's turn. Make a choice by typing 'playGame.playRound(row, column)'."
+  );
 
   // Play a round
-  function playRound() {
+  function playRound(row, column) {
     // Set which player's turn it is
-    // Set choice = to that player's choice (X or O)
-    // Check for win or tie
+    // Set choice to that player's choice (X or O)
+
+    chooseSquare(row, column, players[playerTurn].choice);
+    declareWinnerOrTie();
+    if (!winner && !tie) {
+      playerTurn === 0 ? (playerTurn = 1) : (playerTurn = 0);
+      console.log(`It's ${players[playerTurn].name}'s turn.`);
+    } else {
+      gameOver();
+    }
   }
 
   // Choose the square
@@ -47,8 +61,9 @@ const playGame = (function () {
     if (board[row][column] === "") {
       board[row][column] = choice;
       console.log(board);
-    } else throw new Error("That spot is taken.");
-    declareWinnerOrTie();
+    } else {
+      throw new Error("That spot is taken.");
+    }
   }
 
   function declareWinnerOrTie() {
@@ -106,6 +121,8 @@ const playGame = (function () {
     }
 
     function declareWinner(player, choice) {
+      winner = true;
+      console.log(winner);
       console.log(`${player} (${choice}s) is the winner.`);
     }
 
@@ -131,9 +148,26 @@ const playGame = (function () {
     } else if (checkDiagonal("O")) {
       declareWinner(playerTwo, players[1].choice);
     } else if (checkForTie()) {
+      tie = true;
       console.log("It's the cat's game.");
     }
   }
 
-  return { chooseSquare, declareWinnerOrTie };
+  function gameOver() {
+    console.log("Game over.");
+    // Actual function needs to disable all buttons and create
+    // a New Game button
+  }
+
+  return { playRound, declareWinnerOrTie };
 })();
+
+playGame.playRound(2, 0);
+playGame.playRound(1, 0);
+playGame.playRound(2, 1);
+playGame.playRound(1, 1);
+playGame.playRound(0, 0);
+playGame.playRound(2, 2);
+playGame.playRound(1, 2);
+playGame.playRound(0, 1);
+playGame.playRound(0, 1);
