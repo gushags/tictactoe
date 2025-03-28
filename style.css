@@ -1,15 +1,28 @@
 @import url(css-reset-josh.css);
 
+header {
+  margin: 15px auto;
+  text-align: center;
+}
+
+button {
+  background-color: transparent;
+  border-radius: 30px;
+  margin-top: 10px;
+}
+
 .gameboard {
   display: grid;
-  width: 225px;
+  width: 600px;
+  margin: 0 auto;
   grid-template-columns: repeat(3, 1fr);
 }
 
 [class^="row"] {
-  background-color: aquamarine;
-  height: 75px;
-  width: 75px;
+  height: 200px;
+  width: 200px;
+  text-align: center;
+  font-size: 8rem;
 }
 
 .zero,
@@ -24,5 +37,9 @@
 }
 
 .result {
-  height: 35px;
+  height: 45px;
+  margin: 0 auto 10px auto;
+  text-align: center;
+  font-size: 2rem;
+  color: green;
 }
