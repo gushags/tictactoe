@@ -22,3 +22,7 @@
 .two:not([data-column="2"]) {
   border-right: 4px solid black;
 }
+
+.result {
+  height: 35px;
+}

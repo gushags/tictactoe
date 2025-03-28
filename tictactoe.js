@@ -30,6 +30,7 @@ function playGame() {
   const myBoard = gameBoard();
   const playerOne = "Player One";
   const playerTwo = "Player Two";
+  let winPlayer = "";
   const players = [
     { name: playerOne, choice: "X" },
     { name: playerTwo, choice: "O" },
@@ -125,7 +126,7 @@ function playGame() {
     function declareWinner(player, choice) {
       winner = true;
       console.log(`${player} (${choice}s) is the winner.`);
-      return player;
+      winPlayer = player;
     }
 
     if (
@@ -152,6 +153,7 @@ function playGame() {
       tie = true;
       console.log("It's the cat's game.");
     }
+    return { declareWinner };
   }
 
   function gameOver() {
@@ -160,10 +162,12 @@ function playGame() {
 
   const getWinner = () => winner;
   const getTie = () => tie;
+  const winningPlayer = () => winPlayer;
 
   return {
     playRound,
     getBoard: myBoard.getBoard,
+    winningPlayer,
     getWinner,
     getTie,
   };
@@ -174,17 +178,46 @@ function displayDOM() {
   const currentBoard = game.getBoard();
 
   const spaces = document.querySelectorAll(".row");
+  const result = document.querySelector(".result");
+  const button = document.querySelector("button");
 
   spaces.forEach((space) => {
-    space.addEventListener("click", function () {
-      game.playRound(space.dataset.row, space.dataset.column);
-      space.textContent = currentBoard[space.dataset.row][space.dataset.column];
-      if (game.getWinner()) {
-        console.log("There was a winner.");
-      } else if (game.getTie()) {
-        console.log("There was a tie.");
-      }
-    });
+    space.addEventListener("click", updateCell);
   });
+
+  button.addEventListener("click", newGame);
+
+  function updateCell() {
+    game.playRound(this.dataset.row, this.dataset.column);
+    this.textContent = currentBoard[this.dataset.row][this.dataset.column];
+    if (game.getWinner()) {
+      updateWinner();
+    } else if (game.getTie()) {
+      updateTie();
+    }
+  }
+
+  function updateWinner() {
+    console.log(`The winner is ${game.winningPlayer()}!`);
+    spaces.forEach((space) => {
+      space.removeEventListener("click", updateCell);
+    });
+    result.textContent = `The winner is ${game.winningPlayer()}!`;
+  }
+
+  function updateTie() {
+    spaces.forEach((space) => {
+      space.removeEventListener("click", updateCell);
+    });
+    result.textContent = "It's a cat's game.";
+  }
+
+  function newGame() {
+    spaces.forEach((space) => {
+      space.textContent = "";
+    });
+    result.textContent = "";
+    displayDOM();
+  }
 }
 displayDOM();
