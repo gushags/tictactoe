@@ -124,8 +124,8 @@ function playGame() {
 
     function declareWinner(player, choice) {
       winner = true;
-      console.log(winner);
       console.log(`${player} (${choice}s) is the winner.`);
+      return player;
     }
 
     if (
@@ -156,11 +156,17 @@ function playGame() {
 
   function gameOver() {
     console.log("Game over.");
-    // Actual function needs to disable all buttons and create
-    // a New Game button
   }
 
-  return { playRound, getBoard: myBoard.getBoard };
+  const getWinner = () => winner;
+  const getTie = () => tie;
+
+  return {
+    playRound,
+    getBoard: myBoard.getBoard,
+    getWinner,
+    getTie,
+  };
 }
 
 function displayDOM() {
@@ -173,6 +179,11 @@ function displayDOM() {
     space.addEventListener("click", function () {
       game.playRound(space.dataset.row, space.dataset.column);
       space.textContent = currentBoard[space.dataset.row][space.dataset.column];
+      if (game.getWinner()) {
+        console.log("There was a winner.");
+      } else if (game.getTie()) {
+        console.log("There was a tie.");
+      }
     });
   });
 }
